@@ -24,21 +24,18 @@
 {
     [super viewDidLoad];
 
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.meetup.com/2/event_comments?&sign=true&photo-host=public&event_id=%@&page=20&key=3c7f626d333e3a7433a44552f6b775f",self.event.eventID]];
-
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-
-                               NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-
-                               NSArray *jsonArray = [dict objectForKey:@"results"];
-
-                               self.dataArray = [Comment objectsFromArray:jsonArray];
-                               [self.tableView reloadData];
-                           }];
+    [self.event getEventArray:^(NSArray *array, NSError *error)
+    {
+        if (error)
+        {
+            NSLog(@"ALARMA %@", error);
+        }
+        else
+        {
+        self.dataArray = [Comment objectsFromArray:array];
+        [self.tableView reloadData];
+        }
+    }];
 
     self.dateFormatter = [[NSDateFormatter alloc]init];
     [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
