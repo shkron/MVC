@@ -32,7 +32,7 @@
         }
         else
         {
-        self.dataArray = [Comment objectsFromArray:array];
+        self.dataArray = array;
         [self.tableView reloadData];
         }
     }];

@@ -7,6 +7,7 @@
 //
 
 #import "Event.h"
+#import "Comment.h"
 
 @implementation Event
 
@@ -93,7 +94,7 @@
     
                                    NSArray *jsonArray = [dict objectForKey:@"results"];
     
-                                   complete (jsonArray, connectionError);
+                                   complete ([Comment objectsFromArray:jsonArray], connectionError);
                                }];
 }
 
