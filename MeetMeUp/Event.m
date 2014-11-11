@@ -80,7 +80,7 @@
 
 }
 
--(void)getEventArray:(void (^)(NSArray *array, NSError *error))complete
+-(void)getCommentsArray:(void (^)(NSArray *array, NSError *error))complete
 {
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.meetup.com/2/event_comments?&sign=true&photo-host=public&event_id=%@&page=20&key=3c7f626d333e3a7433a44552f6b775f",self.eventID]];
     

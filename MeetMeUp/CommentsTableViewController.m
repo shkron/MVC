@@ -24,7 +24,7 @@
 {
     [super viewDidLoad];
 
-    [self.event getEventArray:^(NSArray *array, NSError *error)
+    [self.event getCommentsArray:^(NSArray *array, NSError *error)
     {
         if (error)
         {

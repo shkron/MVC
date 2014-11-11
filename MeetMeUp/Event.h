@@ -26,6 +26,6 @@
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 -(void)getImageDataForURL:(void(^)(NSData *data, NSError *error))complete;
--(void)getEventArray:(void(^)(NSArray *array, NSError *error))complete;
+-(void)getCommentsArray:(void(^)(NSArray *array, NSError *error))complete;
 
 @end
