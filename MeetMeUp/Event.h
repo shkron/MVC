@@ -22,6 +22,8 @@
 @property (nonatomic, strong) NSArray *commentsArray;
 
 + (NSArray *)eventsFromArray:(NSArray *)incomingArray;
++ (void)searchWithKeyword:(void(^)(NSArray *meetUpsArray, NSError *error))complete withSearchString:(NSString *)keyword;
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 
 @end

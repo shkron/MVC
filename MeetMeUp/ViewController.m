@@ -27,26 +27,31 @@
 
 }
 
-- (void)performSearchWithKeyword:(NSString *)keyword
+-(void)setDataArray:(NSArray *)array
 {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.meetup.com/2/open_events.json?zip=60604&text=%@&time=,1w&key=3c7f626d333e3a7433a44552f6b775f",keyword]];
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                               
-                               NSArray *jsonArray = [[NSJSONSerialization JSONObjectWithData:data
-                                                                                     options:NSJSONReadingAllowFragments
-                                                                                       error:nil] objectForKey:@"results"];
-                               
-                               
-                               self.dataArray = [Event eventsFromArray:jsonArray];
-                               [self.tableView reloadData];
-                           }];
+    _dataArray = array;
+    [self.tableView reloadData];
+}
+
+-(void)performSearchWithKeyword:(NSString *)keyword
+{
+    [Event searchWithKeyword:^(NSArray *meetUpsArray, NSError *error)
+     {
+         if (error)
+         {
+             NSLog(@"ALARMA: %@", error.localizedDescription);
+         }
+         else
+         {
+             self.dataArray = meetUpsArray;
+         }
+
+
+
+     } withSearchString:keyword];
 
 }
+
 
 #pragma mark - Tableview Methods
 

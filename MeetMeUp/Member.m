@@ -10,6 +10,25 @@
 
 @implementation Member
 
++(void)getMemberWithId:(NSString *)memberID withCompletion:(void (^)(Member *member, NSError *error))complete
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.meetup.com/2/member/%@?&sign=true&photo-host=public&page=20&key=3c7f626d333e3a7433a44552f6b775f",memberID]];
+
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+                            {
+                               NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+
+                               Member *member = [[Member alloc]initWithDictionary:dict];
+
+                               complete (member, connectionError);
+                           }];
+
+}
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
     self = [super init];
@@ -24,6 +43,17 @@
         
     }
     return self;
+}
+
+-(void)getDatafromURL:(void (^)(NSData *data, NSError *error))complete
+{
+
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:self.photoURL] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+    {
+        complete (data, connectionError);
+
+    }];
+
 }
 
 

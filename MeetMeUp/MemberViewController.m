@@ -22,36 +22,43 @@
     [super viewDidLoad];
     self.photoImageView.alpha = 0;
 
-
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.meetup.com/2/member/%@?&sign=true&photo-host=public&page=20&key=3c7f626d333e3a7433a44552f6b775f",self.memberID]];
-
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                               NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-
-                             self.member = [[Member alloc]initWithDictionary:dict];
-                           }];
-
-
+    [Member getMemberWithId:self.memberID withCompletion:^(Member *member, NSError *error)
+    {
+        if (error)
+        {
+            NSLog(@"ALARMA: %@", error.localizedDescription);
+        }
+        else
+        {
+            self.member = member;
+        }
+    }];
+    
 }
 
 - (void)setMember:(Member *)member
 {
     _member = member;
     self.nameLabel.text = member.name;
-    
-    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:member.photoURL] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        self.photoImageView.image = [UIImage imageWithData:data];
 
-        [UIView animateWithDuration:.3 animations:^{
-            self.photoImageView.alpha = 1;
-        }];
 
+    [member getDatafromURL:^(NSData *data, NSError *error)
+    {
+        if (error)
+        {
+            NSLog(@"ALARMA %@", error.localizedDescription);
+        }
+        else
+        {
+
+            self.photoImageView.image = [UIImage imageWithData:data];
+
+            [UIView animateWithDuration:.3 animations:^{
+                self.photoImageView.alpha = 1;
+            }];
+        }
     }];
-    
+
 }
 
 

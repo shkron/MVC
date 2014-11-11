@@ -18,7 +18,12 @@
 @property (nonatomic, strong) NSURL *photoURL;
 
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+
++(void)getMemberWithId:(NSString *)memberID withCompletion:(void (^)(Member *member, NSError *error))complete;
+
+-(void)getDatafromURL:(void(^)(NSData *data, NSError *error))complete;
+
+
 
 
 @end
